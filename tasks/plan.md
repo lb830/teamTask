@@ -1,5 +1,7 @@
 # Implementation Plan: teamTask
 
+Implementation status and documented skips: [`../docs/implementation-status.md`](../docs/implementation-status.md). The user authorized execution of this plan; live deployment awaits the documented service setup.
+
 ## Overview
 
 Build the approved team workspace as a Next.js and TypeScript app for Vercel. Supabase provides authentication, Postgres, and private file storage; Resend sends invitations. The app includes a Markdown wiki, personal and team todos, a team vault, and an admin pin wall. AI is a disabled entry point only until a provider is selected. There is no team chatroom.
@@ -59,14 +61,14 @@ After Task 15, review the environment guide, migration order, private-bucket con
 
 ## Risks and mitigations
 
-| Risk | Impact | Mitigation |
-|---|---|---|
-| A role check accidentally grants a global admin or superuser access to team content | High | Keep role management separate from membership checks; inspect each RLS policy against member and non-member scenarios. |
-| Membership removal leaves access through cached session claims or signed file links | High | Query current membership in policies and server handlers; use short-lived signed download URLs. |
-| Supabase Auth links and Resend invitations are configured inconsistently | Medium | Persist invitation expiry/use state in Postgres and document the required redirect and sender settings. |
-| 100 MB uploads exceed a Supabase project limit or time out | Medium | Document the storage project limit and use resumable/direct-to-storage uploads for large items. |
-| No production credentials are present in this repository | Medium | Include an environment template and setup guide; show a setup-required state instead of weakening authentication. |
-| No AI provider has been selected | Low | Keep the AI link disabled and defer provider-specific retrieval and conversation storage. |
+| Risk                                                                                | Impact | Mitigation                                                                                                             |
+| ----------------------------------------------------------------------------------- | ------ | ---------------------------------------------------------------------------------------------------------------------- |
+| A role check accidentally grants a global admin or superuser access to team content | High   | Keep role management separate from membership checks; inspect each RLS policy against member and non-member scenarios. |
+| Membership removal leaves access through cached session claims or signed file links | High   | Query current membership in policies and server handlers; use short-lived signed download URLs.                        |
+| Supabase Auth links and Resend invitations are configured inconsistently            | Medium | Persist invitation expiry/use state in Postgres and document the required redirect and sender settings.                |
+| 100 MB uploads exceed a Supabase project limit or time out                          | Medium | Document the storage project limit and use resumable/direct-to-storage uploads for large items.                        |
+| No production credentials are present in this repository                            | Medium | Include an environment template and setup guide; show a setup-required state instead of weakening authentication.      |
+| No AI provider has been selected                                                    | Low    | Keep the AI link disabled and defer provider-specific retrieval and conversation storage.                              |
 
 ## Open questions
 
