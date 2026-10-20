@@ -4,6 +4,12 @@ import { isConfigured, publicEnv } from "@/lib/supabase/env";
 import type { Database } from "@/lib/database.types";
 
 export async function proxy(request: NextRequest) {
+  // A streamed Server Component redirect produces an HTML 200 plus a
+  // client-side meta refresh. Redirect the unconfigured entry point here so
+  // the browser receives a normal HTTP redirect before rendering the shell.
+  if (request.nextUrl.pathname === "/" && !isConfigured()) {
+    return NextResponse.redirect(new URL("/setup", request.url));
+  }
   if (!isConfigured()) return NextResponse.next();
   let response = NextResponse.next({ request });
   const { url, key } = publicEnv();
